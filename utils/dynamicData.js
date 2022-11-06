@@ -32,6 +32,7 @@ const genRandomIndex = (arr) => Math.floor(Math.random() * arr.length);
 
 const getRandomWord = () => `${lorum[genRandomIndex(lorum)]}`;
 
+//returns a random thought or reaction.
 const getRandomThought = () => {
   const length = Math.floor(Math.random() * (70 - 5 + 1)) + 5
   let thought = '';
@@ -41,4 +42,13 @@ const getRandomThought = () => {
   return thought.substring(0, 280);
 }
 
-module.exports = { genRandomIndex, getRandomThought };
+//returns array of userdata.
+const userData = () => {
+  let users = [];
+  for (let i = 15; i > 0; i--) {
+    users.unshift({username: `username${i}`, email: `${i}@email.com`})
+  }
+  return users;
+}
+
+module.exports = { genRandomIndex, getRandomThought, userData };
