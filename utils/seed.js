@@ -20,32 +20,36 @@ connection.once('open', async () => {
   await User.deleteMany({});
   // add some users..
   await User.collection.insertMany(userData());
-  await getUsername();
+  console.log(await getUsername());
   // here's where it gets complicated,
   // we have users now. so let's make thoughts.
-  const makeThoughts = () => {
+  const makeThoughts = async () => {
     let thoughts = [];
     for (let i = 100; i > 0; i--) {
+      const username = await getUsername();
+      const reactionname = await getUsername();
       thoughts.push({
         thoughtText: getRandomThought(),
-        username: getUsername(),
+        username: username,
         reactions: [
           {
-            username: getUsername(),
+            username: reactionname,
             reactionBody: getRandomThought(),
           },
           {
-            username: getUsername(),
+            username: reactionname,
             reactionBody: getRandomThought(),
           }
         ]
       });
     }
+    console.log(thoughts);
     return thoughts;
   }
-  await Thought.collection.insertMany(makeThoughts());
-  console.log(await User.find({}));
+
+  await Thought.collection.insertMany(await makeThoughts());
   console.log(await Thought.find({}));
+  console.log(await User.find({}));
   console.timeEnd('seeding');
   console.log('finished Seeding.')
   process.exit(0)
