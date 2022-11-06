@@ -1,8 +1,7 @@
 const { Schema, model, Types } = require('mongoose');
 const { formattedDate } = require('../utils/helpers');
 
-const reactionSchema = new Schema(
-  {
+const reactionSchema = new Schema({
     reactionId: {
       type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId(),
@@ -22,7 +21,9 @@ const reactionSchema = new Schema(
       default: Date.now,
       get: formattedDate,
     }
-  }
-);
+},{
+  toJson: { virtuals: true },
+  id: false,
+});
 
 module.exports = reactionSchema;
