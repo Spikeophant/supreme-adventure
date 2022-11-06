@@ -31,3 +31,14 @@ const lorum = [
 const genRandomIndex = (arr) => Math.floor(Math.random() * arr.length);
 
 const getRandomWord = () => `${lorum[genRandomIndex(lorum)]}`;
+
+const getRandomThought = () => {
+  const length = Math.floor(Math.random() * (70 - 5 + 1)) + 5
+  let thought = '';
+  for (let i = 0; i < length; i++) {
+    thought += `${getRandomWord()} `
+  }
+  return thought.substring(0, 280);
+}
+
+module.exports = { genRandomIndex, getRandomThought };
