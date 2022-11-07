@@ -36,5 +36,5 @@ function delThought(req, res) {
     .then((thought) => User.updateOne({ username: thought.username }, thoughts.pop(thought._id))
       .then(() => Thought.deleteOne({ _id: req.params.id })
         .then((data) => res.json(data))))
-    .catch((err) => res.status(500).json(err);)
+    .catch((err) => res.status(500).json(err));
 }
