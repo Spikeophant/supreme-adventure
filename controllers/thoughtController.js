@@ -33,8 +33,13 @@ function updateThought(req, res) {
 
 function delThought(req, res) {
   Thought.findOne({ _id: req.params.id })
-    .then((thought) => User.updateOne({ username: thought.username }, thoughts.pop(thought._id))
-      .then(() => Thought.deleteOne({ _id: req.params.id })
-        .then((data) => res.json(data))))
+    //Filter out thoughts we are deleting from users.
+    .then((thought) => User.updateOne(
+      {username: thought.username },
+      thoughts.filter((obj) => obj._id !== thought._id)
+        //this is so nested it looks confusing no matter hwo I nest.
+      //Does this mean I should refactor?
+    ).then(() => Thought.deleteOne({ _id: req.params.id })
+      .then((data) => res.json(data))))
     .catch((err) => res.status(500).json(err));
 }
