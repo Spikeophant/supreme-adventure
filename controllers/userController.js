@@ -1,4 +1,4 @@
-const { Thought, User } = require ('../model');
+const { Thought, User } = require('../model');
 
 function getUsers(req, res) {
   User.find()
@@ -7,8 +7,8 @@ function getUsers(req, res) {
 }
 
 function getUser(req, res) {
-  User.findOne({ _id: req.params.id }).
-    then((user) => !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user))
+  User.findOne({ _id: req.params.id })
+    .then((user) => !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user))
     .catch((err) => res.status(500).json(err));
 }
 
@@ -31,8 +31,7 @@ function deleteUser(req, res) {
     .then((deadThoughts) =>
   User.deleteOne({ _id: req.params.id })
     .then((data) => {
-      resArr.push(data);
-      resArr.push(deadThoughts);
+      resArr.push(data, deadThoughts);
       res.json(resArr) })
     .catch((err) => res.status(500).json(err))
     )
@@ -40,10 +39,16 @@ function deleteUser(req, res) {
 
 }
 
-module.exports = {
-  getUsers,
-  getUser,
-  createUser,
-  deleteUser,
-  updateUser,
+function addFriend(req, res) {
+  User.updateOne( { _id: req.params.id }, friends.push(req.params.fId))
+    .then((data) => res.json(data))
+    .catch((err) => res.status(500).json(err));
 }
+
+function delFriend(req, res) {
+  User.updateOne({ _id: req.params.id }, friends.pop(req.params.fId))
+    .then((data) => res.json(data))
+    .catch((err) => res.status(500).json(err));
+}
+
+module.exports = {getUsers,getUser,createUser,deleteUser,updateUser,addFriend,delFriend}
