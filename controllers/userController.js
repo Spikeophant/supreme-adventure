@@ -18,6 +18,12 @@ function createUser(req, res) {
     .catch((err) => res.status(500).json(err));
 }
 
+function updateUser(req, res) {
+  User.updateOne({ _id: req.params.id }, req.body)
+    .then((data) => res.json(data))
+    .catch((err) => res.status(500).json(err));
+}
+
 function deleteUser(req, res) {
   User.deleteOne({ _id: req.params.id })
     .then((data) => res.json(data))
@@ -29,4 +35,5 @@ module.exports = {
   getUser,
   createUser,
   deleteUser,
+  updateUser,
 }
