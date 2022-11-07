@@ -4,42 +4,52 @@ const { Thought, User } = require('../model');
 
 function getThoughts(req, res) {
   Thought.find()
-    .then((thoughts) => res.json(thoughts))
+    .then(thoughts => res.json(thoughts))
     .catch((err) => res.status(500).json(err));
 }
 
 function getThought(req, res) {
   Thought.findOne({ _id: req.params.id })
-    .then((thought) => res.json(thought))
-    .catch((err) => res.status(500).json(err));
+    .then(thought => res.json(thought))
+    .catch(err => res.status(500).json(err));
 }
 
 function createThought(req, res) {
   let thoughtArr = []
   Thought.create(req.body)
-    .then((thoughtObj) => User.updateOne({ _id: req.body.userId}, thoughts.push(thoughtObj._id))
-      .then((data) => {
+    .then(thoughtObj => User.updateOne({ _id: req.body.userId}, thoughts.push(thoughtObj._id))
+      .then(data => {
         thoughtArr.push(thoughtObj, data);
         res.json(thoughtArr);
       })
-      .catch((err) => res.status(500).json(err)));
+      .catch(err => res.status(500).json(err)));
 }
 
 function updateThought(req, res) {
   Thought.updateOne({ _id: req.params.id }, req.body)
-    .then((data) => res.json(data))
-    .catch((err) => res.status(500).json(err));
+    .then(data => res.json(data))
+    .catch(err => res.status(500).json(err));
 }
 
 function delThought(req, res) {
   Thought.findOne({ _id: req.params.id })
     //Filter out thoughts we are deleting from users.
-    .then((thought) =>
-      User.updateOne({username: thought.username }, thoughts.filter((obj) => obj._id !== thought._id))
+    .then(thought =>
+      User.updateOne({username: thought.username }, thoughts.filter(obj => obj._id !== thought._id))
       .then(() =>
       Thought.deleteOne({ _id: req.params.id })
-      .then((data) => res.json(data))))
-    .catch((err) => res.status(500).json(err));
+      .then(data => res.json(data))))
+    .catch(err => res.status(500).json(err));
 }
 
-module.exports = { getThought, getThoughts, createThought, delThought, updateThought }
+function addReaction(req, res) {
+  Thought.updateOne( { _id: req.params.id }, thoughts.map(obj => { if (obj._id === req.params.id) { return {...obj, req.body}}}))
+    .then(data => res.json(data))
+    .catch(err => res.status(500).json(err));
+}
+
+function delReaction(req, res) {
+  Thought
+}
+
+module.exports = { getThought, getThoughts, createThought, delThought, updateThought, addReaction }
