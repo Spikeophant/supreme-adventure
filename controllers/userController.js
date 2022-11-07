@@ -1,4 +1,4 @@
-const User = require ('../model/User');
+const { Thought, User } = require ('../model');
 
 function getUsers(req, res) {
   User.find()
@@ -25,9 +25,19 @@ function updateUser(req, res) {
 }
 
 function deleteUser(req, res) {
+  let resArr = [];
+  User.findOne({ _id: req.params.id })
+    .then((usrObj) => Thought.deleteMany({username: usrObj.username})
+    .then((deadThoughts) =>
   User.deleteOne({ _id: req.params.id })
-    .then((data) => res.json(data))
-    .catch((err) => res.status(500).json(err));
+    .then((data) => {
+      resArr.push(data);
+      resArr.push(deadThoughts);
+      res.json(resArr) })
+    .catch((err) => res.status(500).json(err))
+    )
+    );
+
 }
 
 module.exports = {
