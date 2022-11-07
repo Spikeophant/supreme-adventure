@@ -14,7 +14,7 @@ function getThought(req, res) {
     .catch((err) => res.status(500).json(err));
 }
 
-function newThought(req, res) {
+function createThought(req, res) {
   let thoughtArr = []
   Thought.create(req.body)
     .then((thoughtObj) => User.updateOne({ _id: req.body.userId}, thoughts.push(thoughtObj._id))
@@ -34,14 +34,12 @@ function updateThought(req, res) {
 function delThought(req, res) {
   Thought.findOne({ _id: req.params.id })
     //Filter out thoughts we are deleting from users.
-    .then((thought) => User.updateOne(
-      {username: thought.username },
-      thoughts.filter((obj) => obj._id !== thought._id)
-        //this is so nested it looks confusing no matter hwo I nest.
-      //Does this mean I should refactor?
-    ).then(() => Thought.deleteOne({ _id: req.params.id })
+    .then((thought) =>
+      User.updateOne({username: thought.username }, thoughts.filter((obj) => obj._id !== thought._id))
+      .then(() =>
+      Thought.deleteOne({ _id: req.params.id })
       .then((data) => res.json(data))))
     .catch((err) => res.status(500).json(err));
 }
 
-module.exports = { getThoughts, getThought, newThought, updateThought, delThought }
+module.exports = { getThought, getThoughts, createThought, delThought, updateThought }
