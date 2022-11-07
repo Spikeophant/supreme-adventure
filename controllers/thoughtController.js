@@ -43,3 +43,5 @@ function delThought(req, res) {
       .then((data) => res.json(data))))
     .catch((err) => res.status(500).json(err));
 }
+
+module.exports = { getThoughts, getThought, newThought, updateThought, delThought }
