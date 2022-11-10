@@ -40,7 +40,7 @@ function deleteUser(req, res) {
 }
 
 function addFriend(req, res) {
-  User.updateOne( { _id: req.params.id }, friends.push(req.params.fId))
+  User.updateOne( { _id: req.params.id }, { friends: [req.params.fId] })
     .then((data) => res.json(data))
     .catch((err) => res.status(500).json(err));
 }
